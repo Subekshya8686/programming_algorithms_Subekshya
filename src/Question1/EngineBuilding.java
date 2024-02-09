@@ -1,4 +1,4 @@
-package Question1;
+package src.Question1;
 
 import java.util.Arrays;
 
