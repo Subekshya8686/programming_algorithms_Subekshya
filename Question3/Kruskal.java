@@ -2,7 +2,7 @@ package Question3;
 
 import java.util.*;
 
-public class AdjMatrixMst {
+public class Kruskal {
 
     public static class Edge {
         int s;
@@ -20,7 +20,7 @@ public class AdjMatrixMst {
     int graph[][];
     ArrayList<Edge> edges;
 
-    AdjMatrixMst(int v){
+    Kruskal(int v){
         this.v = v;
         graph = new int[v][v];
         edges = new ArrayList<>();
@@ -88,7 +88,7 @@ public class AdjMatrixMst {
     }
 
     public static void main(String[] args) {
-        AdjMatrixMst adj = new AdjMatrixMst(6);
+        Kruskal adj = new Kruskal(6);
         adj.addEdge(0, 1, 4);
         adj.addEdge(0, 3, 2);
         adj.addEdge(1, 2, 20);
