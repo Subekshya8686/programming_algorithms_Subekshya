@@ -1,4 +1,4 @@
-package Question2;
+package src.Question2;
 public class MinMovesToEqualizeDresses {
 
     public static int minMovesToEqualize(int[] dresses) {

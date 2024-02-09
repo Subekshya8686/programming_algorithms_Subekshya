@@ -1,4 +1,4 @@
-package Question2;
+package src.Question2;
 
 import java.util.ArrayList;
 import java.util.List;
