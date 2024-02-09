@@ -1,4 +1,4 @@
-package Question3;
+package src.Question3;
 
 import java.util.*;
 
