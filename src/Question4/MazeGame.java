@@ -54,6 +54,10 @@ public class MazeGame {
             int moves = current.moves;
             Set<Character> keysCollected = current.keys;
 
+            System.out.println("Current Position: (" + row + ", " + col + ")");
+            System.out.println("Moves: " + moves);
+            System.out.println("Keys Collected: " + keysCollected);
+
             if (keysCollected.size() == numKeys) {
                 return moves;
             }
@@ -88,10 +92,9 @@ public class MazeGame {
 
     public static void main(String[] args) {
         char[][] grid = {
-                {'S', 'P', 'P', 'P'},
-                {'W', 'P', 'P', 'E'},
-                {'P', 'b', 'W', 'P'},
-                {'P', 'P', 'P', 'P'}
+                {'S', 'P', 'a', 'P', 'P'},
+                {'W', 'W', 'W', 'P', 'W'},
+                {'b', 'P', 'A', 'P', 'B'}
         };
         System.out.println(minMovesToCollectKeys(grid));
     }
