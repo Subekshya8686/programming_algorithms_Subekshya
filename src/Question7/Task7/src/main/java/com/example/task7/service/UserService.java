@@ -49,7 +49,7 @@ public class UserService {
         // Implement algorithm to build user profile
         User userProfile = new User();
         userProfile.setUsername(user.getUsername());
-        userProfile.setInterests(user.getInterests());
+//        userProfile.setInterests(user.getInterests());
         userProfile.setFollowing(userProfile.getFollowing());
 
         return userProfile;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -13,29 +14,17 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "content")
-public class Content {
+@Table(name = "tags")
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(nullable = false, unique = true)
+    private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-
-    @CollectionTable(name = "content_tags", joinColumns = @JoinColumn(name = "content_id"))
-    @Column(name = "tag")
-    private String tags;
-
-    private int likes;
-
+    @ManyToMany(mappedBy = "tags")
+    private Set<User> users = new HashSet<>();
 }
-
-
-
-
 

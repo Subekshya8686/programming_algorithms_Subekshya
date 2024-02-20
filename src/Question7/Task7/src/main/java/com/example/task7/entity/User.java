@@ -24,16 +24,22 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @Column
-    private String interests;
+    @Column(nullable = false)
+    private String password;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_tags",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Connection> connections = new HashSet<>();
 
     @OneToMany(mappedBy = "connectedUser")
     private Set<Connection> connectedTo = new HashSet<>();
-
 
     @Getter
     @ManyToMany
@@ -51,6 +57,5 @@ public class User {
     public void unfollow(User user) {
         following.remove(user);
     }
-
 }
 

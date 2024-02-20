@@ -14,9 +14,9 @@ public class ContentController {
     @Autowired
     private ContentRepository contentRepository;
 
-    @GetMapping
-    public List<Content> getAllContent() {
-        return contentRepository.findAll();
+    @GetMapping("/content")
+    public List<Content> getContentByTags(@RequestParam(name = "tags", required = false) List<String> tags) {
+        return contentRepository.findByTagsInOrRandomOrder(tags);
     }
 
     @PostMapping

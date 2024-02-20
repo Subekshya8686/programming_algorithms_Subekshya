@@ -2,6 +2,8 @@ package com.example.task7.controller;
 
 import com.example.task7.entity.User;
 import com.example.task7.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,15 @@ public class UserController {
     public User registerUser(@RequestBody User user) {
         // Perform validation and save user to database
         return userRepository.save(user);
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<String> checkUsernameExists(@RequestParam String username) {
+        if (userRepository.existsByUsername(username)) {
+            return ResponseEntity.ok("Username exists");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username does not exist");
+        }
     }
 
     @PostMapping("/{userId}/follow")
