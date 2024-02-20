@@ -37,7 +37,9 @@ public class EngineBuilding {
         int totalTime = 0;
         int engineers = 1;
 
+//        iterate through the sorted engines array
         for (int i = 0; i < engines.length; i++) {
+//            If the number of remaining engines to build is less than or equal to the number of available engineers
             if (engines.length - i <= engineers) {
                 totalTime += engines[i];
             } else {
