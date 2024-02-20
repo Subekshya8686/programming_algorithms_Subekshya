@@ -29,6 +29,7 @@ public class ScoreTracker {
         size = 0;
     }
 
+
     public void addScore(double score) {
         scores = Arrays.copyOf(scores, size + 1);
         scores[size++] = score;
@@ -40,8 +41,10 @@ public class ScoreTracker {
             throw new IllegalStateException("No scores available.");
         }
 
+        //     check if the number of score is even
         if (size % 2 == 0) {
             int mid = size / 2;
+//            return the average of the two middle scores
             return (scores[mid - 1] + scores[mid]) / 2.0;
         } else {
             return scores[size / 2];
