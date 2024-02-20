@@ -1,14 +1,14 @@
+// Implement ant colony algorithm solving
+// travelling a salesman problem
+
 package src.Question5;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class AntColonyTSP {
     private int[][] distances; // Distance matrix
     private int numAnts; // Number of ants
     private double[][] pheromones; // Pheromone matrix
-    private double[][] probabilities; // Transition probabilities matrix
     private int numIterations; // Number of iterations
     private int numCities; // Number of cities
     private Random random;
@@ -19,7 +19,6 @@ public class AntColonyTSP {
         this.numIterations = numIterations;
         this.numCities = distances.length;
         this.pheromones = new double[numCities][numCities];
-        this.probabilities = new double[numCities][numCities];
         this.random = new Random();
     }
 
