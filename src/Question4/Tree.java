@@ -1,3 +1,11 @@
+//You are provided with balanced binary tree with the target value k. return x number of values that are closest to the
+//given target k. provide solution in O(n)
+//Note: You have only one set of unique values x in binary search tree that are closest to the target.
+//Input:
+//K=3.8
+//x=2
+//Output: 3,4
+
 package src.Question4;
 
 import java.util.ArrayList;
