@@ -19,7 +19,7 @@
 package src.Question1;
 
 public class MinimumCostDecoration {
-
+//     check if the input matrix is valid
     public static int minCostToDecorateVenues(int[][] costs) {
         if (costs == null || costs.length == 0 || costs[0].length == 0) {
             return 0;
@@ -51,6 +51,7 @@ public class MinimumCostDecoration {
             }
         }
 
+//         find the minimum total cost of decorating the last venue
         int minTotalCost = Integer.MAX_VALUE;
         for (int j = 0; j<k; j++){
             minTotalCost = Math.min(minTotalCost,dp[n-1][j]);
