@@ -1,101 +1,117 @@
+//You are given a 2D grid representing a maze in a virtual game world. The grid is of size m x n and consists of
+//different types of cells:
+//'P' represents an empty path where you can move freely. 'W' represents a wall that you cannot pass through. 'S'
+//represents the starting point. Lowercase letters represent hidden keys. Uppercase letters represent locked doors.
+//You start at the starting point 'S' and can move in any of the four cardinal directions (up, down, left, right) to
+//adjacent cells. However, you cannot walk through walls ('W').
+//As you explore the maze, you may come across hidden keys represented by lowercase letters. To unlock a door
+//represented by an uppercase letter, you need to collect the corresponding key first. Once you have a key, you can
+//pass through the corresponding locked door.
+//For some 1 <= k <= 6, there is exactly one lowercase and one uppercase letter of the first k letters of the English
+//alphabet in the maze. This means that there is exactly one key for each door, and one door for each key. The letters
+//used to represent the keys and doors follow the English alphabet order.
+//Your task is to find the minimum number of moves required to collect all the keys. If it is impossible to collect all
+//the keys and reach the exit, return -1.
+//Example:
+//Input: grid = [ ["S","P","q","P","P"], ["W","W","W","P","W"], ["r","P","Q","P","R"]]
+//Output: 8
+//The goal is to Collect all key
+
 package src.Question4;
 
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class MazeGame {
-    static class State {
-        int row;
-        int col;
-        int moves;
-        Set<Character> keys;
+    private static final int[] dx = {0, 0, 1, -1}; // Directions: right, left, down, up
+    private static final int[] dy = {1, -1, 0, 0};
 
-        public State(int row, int col, int moves, Set<Character> keys) {
-            this.row = row;
-            this.col = col;
-            this.moves = moves;
-            this.keys = keys;
-        }
-    }
+    public static int minStepsToCollectAllKeys(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
 
-    public static int minMovesToCollectKeys(char[][] grid) {
-        int rows = grid.length;
-        int cols = grid[0].length;
+        int totalKeys = 0;
+        int startX = -1, startY = -1;
+        Map<Character, int[]> keyPositions = new HashMap<>();
+        Set<Character> collectedKeys = new HashSet<>();
 
-        int numKeys = 0;
-        for (char[] row : grid) {
-            for (char cell : row) {
-                if (Character.isLowerCase(cell)) {
-                    numKeys++;
+        // Initialize the keyPositions map and count the total number of keys
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char cell = grid[i][j];
+                if (cell >= 'a' && cell <= 'f') {
+                    keyPositions.put(cell, new int[]{i, j});
+                    totalKeys++;
+                } else if (cell == 'S') {
+                    startX = i;
+                    startY = j;
                 }
             }
         }
 
-        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        Queue<State> queue = new ArrayDeque<>();
+        // BFS to find the shortest path to collect all keys
+        Queue<int[]> queue = new LinkedList<>();
         Set<String> visited = new HashSet<>();
-
-        // Find starting position and initialize the BFS queue
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (grid[i][j] == 'S') {
-                    queue.offer(new State(i, j, 0, new HashSet<>()));
-                    visited.add(i + "," + j);
-                }
-            }
-        }
+        queue.offer(new int[]{startX, startY, 0}); // {x, y, steps}
+        visited.add(startX + "," + startY);
 
         while (!queue.isEmpty()) {
-            State current = queue.poll();
-            int row = current.row;
-            int col = current.col;
-            int moves = current.moves;
-            Set<Character> keysCollected = current.keys;
+            int[] current = queue.poll();
+            int x = current[0];
+            int y = current[1];
+            int steps = current[2];
 
-            System.out.println("Current Position: (" + row + ", " + col + ")");
-            System.out.println("Moves: " + moves);
-            System.out.println("Keys Collected: " + keysCollected);
-
-            if (keysCollected.size() == numKeys) {
-                return moves;
+            if (collectedKeys.size() == totalKeys) {
+                return steps;
             }
 
-            for (int[] dir : directions) {
-                int newRow = row + dir[0];
-                int newCol = col + dir[1];
-                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && grid[newRow][newCol] != 'W') {
-                    char cell = grid[newRow][newCol];
-                    Set<Character> newKeysCollected = new HashSet<>(keysCollected);
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
 
-                    if (Character.isLowerCase(cell)) {
-                        newKeysCollected.add(cell);
-                    } else if (Character.isUpperCase(cell) && keysCollected.contains(Character.toLowerCase(cell))) {
-                        // Check if the key for this door is collected
-                        newKeysCollected.remove(Character.toLowerCase(cell));
-                    } else if (Character.isUpperCase(cell)) {
-                        continue; // Skip if the key for this door is not collected
-                    }
+                if (nx >= 0 && nx < m && ny >= 0 && ny < n && grid[nx][ny] != 'W') {
+                    char nextCell = grid[nx][ny];
 
-                    String newState = newRow + "," + newCol;
-                    if (!visited.contains(newState)) {
-                        visited.add(newState);
-                        queue.offer(new State(newRow, newCol, moves + 1, newKeysCollected));
+                    if (nextCell == 'P' || nextCell == 'S' || (nextCell >= 'a' && nextCell <= 'f') || collectedKeys.contains(Character.toLowerCase(nextCell))) {
+                        String key = nx + "," + ny;
+                        if (!visited.contains(key)) {
+                            queue.offer(new int[]{nx, ny, steps + 1});
+                            visited.add(key);
+                        }
+                    } else if (nextCell >= 'A' && nextCell <= 'F') {
+                        char requiredKey = Character.toLowerCase(nextCell);
+                        if (collectedKeys.contains(requiredKey)) {
+                            String key = nx + "," + ny;
+                            if (!visited.contains(key)) {
+                                queue.offer(new int[]{nx, ny, steps + 1});
+                                visited.add(key);
+                            }
+                        }
+                    } else {
+                        // Collecting the key
+                        if (nextCell >= 'a' && nextCell <= 'f' && !collectedKeys.contains(nextCell)) {
+                            collectedKeys.add(nextCell);
+                            grid[nx][ny] = 'P'; // Update the grid
+                            String key = nx + "," + ny;
+                            if (!visited.contains(key)) {
+                                queue.offer(new int[]{nx, ny, steps + 1});
+                                visited.add(key);
+                            }
+                        }
                     }
                 }
             }
         }
 
-        return -1; // If exit cannot be reached
+        return -1; // Cannot collect all keys
     }
 
     public static void main(String[] args) {
         char[][] grid = {
-                {'S', 'P', 'a', 'P', 'P'},
+                {'S', 'P', 'q', 'P', 'P'},
                 {'W', 'W', 'W', 'P', 'W'},
-                {'b', 'P', 'A', 'P', 'B'}
+                {'r', 'P', 'Q', 'P', 'R'}
         };
-        System.out.println(minMovesToCollectKeys(grid));
+        int minSteps = minStepsToCollectAllKeys(grid);
+        System.out.println("Minimum steps to collect all keys: " + minSteps); // Output: 8
     }
 }
